@@ -1,0 +1,23 @@
+# 虚拟环境
+venv01/
+__pycache__/
+
+# 临时文件
+*.pyc
+*.log
+*.bak
+
+# 个人配置文件
+
+
+# 测试功能 正在完善
+core/tasks/huanjing.py
+trash/
+
+# IDE 配置
+.vscode/
+.idea/
+
+# 打包输出目录（如果后续需要提交 exe，可注释掉）
+dist/
+build/
