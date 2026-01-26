@@ -9,9 +9,7 @@ __pycache__/
 
 # 个人配置文件
 
-
 # 测试功能 正在完善
-core/tasks/huanjing.py
 trash/
 
 # IDE 配置
@@ -21,3 +19,4 @@ trash/
 # 打包输出目录（如果后续需要提交 exe，可注释掉）
 dist/
 build/
+tdjie.spec

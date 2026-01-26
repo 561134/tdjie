@@ -36,6 +36,9 @@ def poll_log():
 def launch_and_wait():
     # 现在可以安全访问 btn_launch 了
     btn_launch.config(state="disabled")
+    # 添加启动延迟
+    print("[INFO] 5秒后启动游戏...")
+    time.sleep(5)
     try:
         try:
             get_window_size()
@@ -44,15 +47,20 @@ def launch_and_wait():
             log("[INFO] 未检测到窗口，准备启动")
             begin()
             time.sleep(8)
+            # 等待启动器出现
             while not match_pics("tdjimages/begingame.png"):
                 log("等待启动器...")
                 time.sleep(3)
-            click_coord(match_pics("tdjimages/begingame.png"), do_click=True)
+            # 点击启动器 如果一直存在一直点
+            while match_pics("tdjimages/begingame.png"):
+                log("点击启动器...")
+                click_coord(match_pics("tdjimages/begingame.png"), do_click=True)
+                time.sleep(3)
             time.sleep(20)
             get_window_size()
             begin2()
 
-        for _ in range(30):
+        for _ in range(10):
             if match_pics("tdjimages/qicheng.png"):
                 log("[INFO] 游戏就绪！")
                 btn_start.config(state="normal")
@@ -78,15 +86,15 @@ def start_tasks():
 def run_gui():
     global root, vars_, btn_start, btn_launch, log_text
     root = tk.Tk()
-    root.title("天地劫助手")
-    root.geometry("720x420")
+    root.title("天地劫手游助手")
+    root.geometry("650x360")
     root.resizable(True, True)
 
     # ---------- 左侧 ----------
     left = ttk.Frame(root)
     left.pack(side="left", fill="both", expand=True, padx=8, pady=5)
 
-    task_frame = ttk.Labelframe(left, text="任务列表（默认不选）")
+    task_frame = ttk.Labelframe(left, text="任务列表")
     task_frame.pack(fill="both", expand=True)
     COLS = 2# 每行 3 个任务（想 2 个就写 2）
     vars_ = {}
