@@ -32,16 +32,20 @@ class TdgeTask(BaseTask):
         # 3. 点击远征任务
         click_coord(match_pics(template_path='tdjimages/tdge_yuanz.png'),do_click=True)
         time.sleep(3)
-        # print("领取上次讨伐奖励")
-        # if match_pics(template_path='tdjimages/tdge_yuanz_taofa_over.png'):
-        #     click_coord(match_pics(template_path='tdjimages/tdge_yuanz_taofa_over.png'),do_click=True)#讨伐完成
-        #     time.sleep(2)
-        #     click_coord(match_pics(template_path='tdjimages/tdge_yuanz_taofa_gift.png'),do_click=True)#讨伐完成
-        #     time.sleep(2)
-        #     click_coord(match_pics(template_path='tdjimages/tdge_back.png'),do_click=True)
-        #     time.sleep(2)
+        if match_pics(template_path='tdjimages/tdge_yuanz_taofa_over.png'):
+            print("领取上次讨伐奖励")
+            click_coord(match_pics(template_path='tdjimages/tdge_yuanz_taofa_over.png'),do_click=True)#讨伐完成
+            time.sleep(2)
+            click_coord(match_pics(template_path='tdjimages/tdge_yuanz_taofa_gift.png'),do_click=True)#讨伐完成
+            time.sleep(2)
+            while not match_pics(template_path='tdjimages/tdge_yuanz.png'):
+                click_coord(match_pics(template_path='tdjimages/tdge_back.png'),do_click=True)
+                time.sleep(3)
         print("匹配远征BOSS图标 出战图标")
+        click_coord(match_pics(template_path='tdjimages/tdge_yuanz.png'),do_click=True)
+        time.sleep(3)
         click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss1.png'),do_click=True)
+        click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss2.png'),do_click=True)
         click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss4.png'),do_click=True)
         click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss5.png'),do_click=True)
         time.sleep(3)

@@ -86,7 +86,7 @@ def start_tasks():
 def run_gui():
     global root, vars_, btn_start, btn_launch, log_text
     root = tk.Tk()
-    root.title("天地劫手游助手")
+    root.title("天地劫助手")
     root.geometry("650x360")
     root.resizable(True, True)
 

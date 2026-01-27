@@ -13,7 +13,7 @@ class HuanjingTask(BaseTask):
     name = "幻境"
     order = 100
     def run(self, stop_event: threading.Event):
-        print(">>> 幻境任务开始")
+        print(">>> 幻境任务开始 打5次幻境")
         time.sleep(3)
         off_huanjing = client_offset()# 定义相对窗口坐标偏移量
         time.sleep(1)
@@ -58,7 +58,7 @@ class HuanjingTask(BaseTask):
             time.sleep(3)
             return
         # 2. 匹配2x pve 打5次幻境
-        for i in range(6):
+        for i in range(5):
             time.sleep(2)
             print(f"第{i+1}次挑战2x玩家")
             click_coord(match_pics(template_path='tdjimages/hj_x2.png'),do_click=True)
