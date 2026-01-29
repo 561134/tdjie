@@ -33,7 +33,7 @@ class TdgeTask(BaseTask):
         click_coord(match_pics(template_path='tdjimages/tdge_renwu.png'),do_click=True)
         time.sleep(3)
         # 一次性获取匹配所有领取图标结果 确保每个图标都被点击到
-        matches_lingqu = match_pics(template_path="tdjimages/tdge_renwu_lingqu.png")
+        matches_lingqu = match_pics(template_path="tdjimages/tdge_renwu_lingqu.png",threshold=0.7)
         time.sleep(2)
         if matches_lingqu:
             print(f"[INFO] 找到 {len(matches_lingqu)} 个领取图标，开始点击...")
@@ -99,7 +99,7 @@ class TdgeTask(BaseTask):
                     return
             print(">>> 天地阁任务完成 成功返回营地界面")
         else:
-            print(f"警告：只找到 {len(matches)} 个推荐角色图标，不满足3个 即将返回营地界面")
+            print(f"警告：只找到 {len(matches_tuijian)} 个推荐角色图标，不满足3个 即将返回营地界面")
             while not match_pics(template_path='tdjimages/qicheng.png'):
                 print("匹配返回图标")
                 click_coord(match_pics(template_path='tdjimages/tdge_back.png'),do_click=True)

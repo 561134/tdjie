@@ -1,6 +1,8 @@
 # app.py
 import tkinter as tk
-from tkinter import ttk, messagebox, scrolledtext
+from tkinter import ttk, scrolledtext
+import win32gui
+import win32con
 from core.executor import Executor
 from core.tasks import get_all_tasks
 from utils.window import get_window_size
@@ -32,12 +34,34 @@ def poll_log():
         log_text.see(tk.END)
     root.after(200, poll_log)
 
+# 激活启动器窗口
+def activate_launcher():
+    """
+    激活启动器窗口，确保其在最上层
+    """
+    # 尝试查找启动器窗口
+    # 注意：启动器窗口标题可能需要根据实际情况调整
+    hwnd = win32gui.FindWindow(None, "天地劫：幽城再临")
+    if not hwnd:
+        hwnd = win32gui.FindWindow(None, "天地劫")
+    if hwnd:
+        print("[INFO] 找到启动器窗口，正在激活...")
+        # 恢复窗口（如果最小化）
+        if win32gui.IsIconic(hwnd):
+            win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+        # 显示窗口
+        win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
+        # 激活窗口
+        # win32gui.SetForegroundWindow(hwnd)
+        return True
+    return False
+
 # ---------- 启动 ----------
 def launch_and_wait():
     # 现在可以安全访问 btn_launch 了
     btn_launch.config(state="disabled")
     # 添加启动延迟
-    print("[INFO] 5秒后启动游戏...")
+    print("[INFO] 将在5秒后启动游戏...")
     time.sleep(5)
     try:
         try:
@@ -50,10 +74,15 @@ def launch_and_wait():
             # 等待启动器出现
             while not match_pics("tdjimages/begingame.png"):
                 log("等待启动器...")
+                # 定期激活启动器窗口
+                activate_launcher()
                 time.sleep(3)
             # 点击启动器 如果一直存在一直点
             while match_pics("tdjimages/begingame.png"):
                 log("点击启动器...")
+                # 每次点击前激活窗口
+                activate_launcher()
+                time.sleep(1)
                 click_coord(match_pics("tdjimages/begingame.png"), do_click=True)
                 time.sleep(3)
             time.sleep(20)
