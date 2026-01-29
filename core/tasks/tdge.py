@@ -55,9 +55,9 @@ class TdgeTask(BaseTask):
         # 4. 点击远征任务
         click_coord(match_pics(template_path='tdjimages/tdge_yuanz.png'),do_click=True)
         time.sleep(3)
-        if match_pics(template_path='tdjimages/tdge_yuanz_taofa_over.png'):
+        if match_pics(template_path='tdjimages/tdge_yuanz_taofa_wan.png'):
             print("领取上次讨伐奖励")
-            click_coord(match_pics(template_path='tdjimages/tdge_yuanz_taofa_over.png'),do_click=True)#讨伐完成
+            click_coord(match_pics(template_path='tdjimages/tdge_yuanz_taofa_wan.png'),do_click=True)#讨伐完成
             time.sleep(2)
             click_coord(match_pics(template_path='tdjimages/tdge_yuanz_taofa_gift.png'),do_click=True)#讨伐完成
             time.sleep(2)
@@ -99,7 +99,7 @@ class TdgeTask(BaseTask):
                     return
             print(">>> 天地阁任务完成 成功返回营地界面")
         else:
-            print(f"警告：只找到 {len(matches_tuijian)} 个推荐角色图标，不满足3个 即将返回营地界面")
+            print(f"只找到{len(matches_tuijian)}个推荐角色图标，不满足3个 或许该任务已做 即将返回营地界面")
             while not match_pics(template_path='tdjimages/qicheng.png'):
                 print("匹配返回图标")
                 click_coord(match_pics(template_path='tdjimages/tdge_back.png'),do_click=True)

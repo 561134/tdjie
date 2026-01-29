@@ -10,9 +10,10 @@ from .lilian import LilianTask
 from .yiwen import YiwenTask
 from .qiyu import QiyuTask
 from .shanhez import ShanhezTask
-# from .shenkan import ShenkanTask
 from .kaoyu import KaoyuTask
 from .huanjing import HuanjingTask
+# 下面是以后扩展功能
+# from .shenkan import ShenkanTask
 
 # 获取所有任务类
 def get_all_tasks():
@@ -25,8 +26,8 @@ def get_all_tasks():
         ("山河志", ShanhezTask),
         ("异闻", YiwenTask),
         ("奇遇", QiyuTask),
-        # ("神龛", ShenkanTask),
         ("烤鱼", KaoyuTask),
         ("幻境竞技场", HuanjingTask),
+        # ("神龛", ShenkanTask),
         ("测试", CeshiTask),
     ]

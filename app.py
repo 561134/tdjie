@@ -1,17 +1,16 @@
 # app.py
 import tkinter as tk
 from tkinter import ttk, scrolledtext
-import win32gui
-import win32con
 from core.executor import Executor
 from core.tasks import get_all_tasks
 from utils.window import get_window_size
-from utils.image import match_pics, click_coord
+from utils.image import match_pics
 import threading
 import time
 from utils.admin import begin, begin2
 import traceback
 import queue
+
 
 executor = Executor()
 log_q = queue.Queue()
@@ -34,27 +33,7 @@ def poll_log():
         log_text.see(tk.END)
     root.after(200, poll_log)
 
-# 激活启动器窗口
-def activate_launcher():
-    """
-    激活启动器窗口，确保其在最上层
-    """
-    # 尝试查找启动器窗口
-    # 注意：启动器窗口标题可能需要根据实际情况调整
-    hwnd = win32gui.FindWindow(None, "天地劫：幽城再临")
-    if not hwnd:
-        hwnd = win32gui.FindWindow(None, "天地劫")
-    if hwnd:
-        print("[INFO] 找到启动器窗口，正在激活...")
-        # 恢复窗口（如果最小化）
-        if win32gui.IsIconic(hwnd):
-            win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
-        # 显示窗口
-        win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
-        # 激活窗口
-        # win32gui.SetForegroundWindow(hwnd)
-        return True
-    return False
+
 
 # ---------- 启动 ----------
 def launch_and_wait():
@@ -70,29 +49,40 @@ def launch_and_wait():
         except RuntimeError:
             log("[INFO] 未检测到窗口，准备启动")
             begin()
-            time.sleep(8)
-            # 等待启动器出现
-            while not match_pics("tdjimages/begingame.png"):
-                log("等待启动器...")
-                # 定期激活启动器窗口
-                activate_launcher()
-                time.sleep(3)
-            # 点击启动器 如果一直存在一直点
-            while match_pics("tdjimages/begingame.png"):
-                log("点击启动器...")
-                # 每次点击前激活窗口
-                activate_launcher()
-                time.sleep(1)
-                click_coord(match_pics("tdjimages/begingame.png"), do_click=True)
-                time.sleep(3)
-            time.sleep(20)
-            get_window_size()
-            begin2()
-
+            # 每3秒检查一次游戏窗口是否启动，60秒超时
+            max_wait_time = 60
+            wait_interval = 3
+            elapsed_time = 0
+            log(f"[INFO] 等待游戏主程序启动，每{wait_interval}秒检查一次，最多等待{max_wait_time}秒...")
+            
+            while elapsed_time < max_wait_time:
+                try:
+                    get_window_size()
+                    log(f"[INFO] 游戏窗口已启动，耗时{elapsed_time}秒")
+                    begin2()
+                    break
+                except RuntimeError:
+                    log(f"[INFO] 游戏窗口尚未启动，已等待{elapsed_time}秒...")
+                    time.sleep(wait_interval)
+                    elapsed_time += wait_interval
+            if elapsed_time >= max_wait_time:
+                log(f"[ERROR] 游戏启动超时，已等待{max_wait_time}秒，停止任务")
+                return
+        
+        time.sleep(1)
         for _ in range(10):
             if match_pics("tdjimages/qicheng.png"):
                 log("[INFO] 游戏就绪！")
                 btn_start.config(state="normal")
+                
+                # 自动开始执行每日任务
+                selected = [cls for name, cls in get_all_tasks() if vars_[name].get()]
+                if selected:
+                    log("[INFO] 自动开始执行每日任务...")
+                    executor.start_tasks(selected)
+                else:
+                    log("[INFO] 未选择任何任务，请手动选择后点击'开始任务'")
+                
                 return
             time.sleep(3)
         log("[ERROR] 超时未检测到启程")
@@ -127,14 +117,15 @@ def run_gui():
     task_frame.pack(fill="both", expand=True)
     COLS = 2# 每行 3 个任务（想 2 个就写 2）
     vars_ = {}
-    for idx, (name, cls) in enumerate(get_all_tasks()):
+    all_tasks = get_all_tasks()  # 只调用一次，避免重复调用
+    for idx, (name, cls) in enumerate(all_tasks):
         vars_[name] = tk.BooleanVar(value=False)
         cb = ttk.Checkbutton(task_frame, text=name, variable=vars_[name])
         # 网格布局：行号=idx//COLS，列号=idx%COLS
         cb.grid(row=idx//COLS, column=idx%COLS, sticky="w", padx=6, pady=2)
       
     # 计算最后一行的行号
-    last_row = (len(list(get_all_tasks())) + COLS - 1) // COLS
+    last_row = (len(all_tasks) + COLS - 1) // COLS
     sel_bar = ttk.Frame(task_frame)
     sel_bar.grid(row=last_row, column=0, columnspan=COLS, sticky="ew", padx=6, pady=4)
     ttk.Button(sel_bar, text="全选", command=lambda: [v.set(True) for v in vars_.values()]).pack(side="left", padx=2)
