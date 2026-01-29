@@ -11,7 +11,7 @@ from .yiwen import YiwenTask
 from .qiyu import QiyuTask
 from .shanhez import ShanhezTask
 # from .shenkan import ShenkanTask
-# from .kaoyu import KaoyuTask
+from .kaoyu import KaoyuTask
 from .huanjing import HuanjingTask
 
 # 获取所有任务类
@@ -26,7 +26,7 @@ def get_all_tasks():
         ("异闻", YiwenTask),
         ("奇遇", QiyuTask),
         # ("神龛", ShenkanTask),
-        # ("烤鱼", KaoyuTask),
+        ("烤鱼", KaoyuTask),
         ("幻境竞技场", HuanjingTask),
         ("测试", CeshiTask),
     ]
