@@ -79,54 +79,47 @@ class HuanjingTask(BaseTask):
                 return
             chu_count = 0
             while not match_pics(template_path='tdjimages/hj_chuzhan.png'):
-                time.sleep(3)
                 chu_count += 1
                 if chu_count > 5:
                     break
+                time.sleep(3)
                 if stop_event.is_set():# ★随时响应“停止”
                     return
-        
             time.sleep(1)
             click_coord(match_pics(template_path='tdjimages/hj_chuzhan.png'),do_click=True)
-            time.sleep(1)
-            click_coord(match_pics(template_path='tdjimages/hj_chuzhan.png'),do_click=True)
-            time.sleep(1)
-            click_coord(match_pics(template_path='tdjimages/hj_tishi_01.png'),do_click=True)
-            time.sleep(1)
-            click_coord(match_pics(template_path='tdjimages/hj_tishi_sure.png'),do_click=True)
-            time.sleep(1)
-            click_coord(match_pics(template_path='tdjimages/hj_skipbattle.png'),do_click=True)
-            time.sleep(3)
-            click_coord(match_pics(template_path='tdjimages/hj_skipbattle.png'),do_click=True)
-            time.sleep(3)
-            click_coord(match_pics(template_path='tdjimages/hj_skipbattle.png'),do_click=True)
-            time.sleep(3)
-            click_coord(match_pics(template_path='tdjimages/hj_skipbattle.png'),do_click=True)
-            time.sleep(6)
+            time.sleep(2)
+            click_coord(match_pics(template_path='tdjimages/hj_skipbattle.png'),do_click=True,clicks=2)
+            time.sleep(2)
+            click_coord(match_pics(template_path='tdjimages/hj_skipbattle.png'),do_click=True,clicks=2)
             count = 0
             # 匹配x2界面此次战斗结束，就可以进行下一场战斗
             while not match_pics(template_path='tdjimages/hj_x2.png'):
-                # click_coord([(520,500,1.0)],do_click=True,clicks=2)# 点击空白位置 战斗结束
-                click_coord([(off_huanjing[0] + 211, off_huanjing[1] + 333, 1.0)],do_click=True,clicks=2)
-                time.sleep(3)
-                click_coord(match_pics(template_path='tdjimages/hj_chuzhan.png'),do_click=True)
+                print("进入循环匹配战斗过程等图标 代码还能优化")
+                click_coord(match_pics(template_path='tdjimages/hj_skipbattle.png'),do_click=True,clicks=2)
                 click_coord(match_pics(template_path='tdjimages/hj_tishi_01.png'),do_click=True)
                 click_coord(match_pics(template_path='tdjimages/hj_tishi_sure.png'),do_click=True)
-                click_coord(match_pics(template_path='tdjimages/hj_skipbattle.png'),do_click=True)
+                click_coord([(off_huanjing[0] + 211, off_huanjing[1] + 333, 1.0)],do_click=True,clicks=2)
+                click_coord(match_pics(template_path='tdjimages/hj_chuzhan.png'),do_click=True)
                 time.sleep(3)
-                count += 1
-                if count > 5:
-                    print("count>5 超次数退出判断hj_x2")
-                    break
                 if stop_event.is_set():# ★随时响应“停止”
                     return
-
-        time.sleep(5)
+                count += 1
+                if count > 9:
+                    print("count>9 超次数退出判断hj_x2 返回营地界面")
+                    while not match_pics(template_path='tdjimages/qicheng.png'):
+                        click_coord(match_pics(template_path='tdjimages/hj_x.png'),do_click=True)
+                        click_coord(match_pics(template_path='tdjimages/hj_back.png'),do_click=True)
+                        click_coord([(off_huanjing[0] + 211, off_huanjing[1] + 333, 1.0)],do_click=True,clicks=2)
+                        time.sleep(3)
+                    return
+        print("领取幻境奖励")
+        click_coord([(off_huanjing[0] + 675, off_huanjing[1] + 630, 1.0)],do_click=True)
+        click_coord([(off_huanjing[0] + 765, off_huanjing[1] + 630, 1.0)],do_click=True)
+        click_coord([(off_huanjing[0] + 915, off_huanjing[1] + 630, 1.0)],do_click=True)
+        time.sleep(3)
         while not match_pics(template_path='tdjimages/qicheng.png'):
             click_coord(match_pics(template_path='tdjimages/hj_x.png'),do_click=True)
-            time.sleep(3)
             click_coord(match_pics(template_path='tdjimages/hj_back.png'),do_click=True)
-            time.sleep(3)
             click_coord([(off_huanjing[0] + 211, off_huanjing[1] + 333, 1.0)],do_click=True,clicks=2)
             time.sleep(3)
             if stop_event.is_set():# ★随时响应“停止”
