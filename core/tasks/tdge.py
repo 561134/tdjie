@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import time
 import threading
+import glob
 from ..base_task import BaseTask
 from utils.image import match_pics, click_coord   # 统一入口
 from utils.window import client_offset
@@ -22,8 +23,11 @@ class TdgeTask(BaseTask):
         print("闪电任务完成")
         # 2. 好友加速任务
         time.sleep(2)
-        print("开始好友加速任务 点击天地阁")
+        print("点击天地阁")
         click_coord(match_pics(template_path='tdjimages/tdge.png'),do_click=True)
+        time.sleep(3)
+        print("点击绳子标记 防止其它弹窗干扰")
+        click_coord(match_pics(template_path='tdjimages/tdge_mark.png'),do_click=True,clicks=2)
         time.sleep(3)
         print("匹配动态图标")
         click_coord(match_pics(template_path='tdjimages/tdge_dongtai.png'),do_click=True)
@@ -57,12 +61,20 @@ class TdgeTask(BaseTask):
         # 3. 点击远征任务
         click_coord(match_pics(template_path='tdjimages/tdge_yuanz.png'),do_click=True)
         time.sleep(3)
-        click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss1.png'),do_click=True)
-        click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss2.png'),do_click=True)
-        click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss3.png'),do_click=True)
-        click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss4.png'),do_click=True)
-        click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss5.png'),do_click=True)
-        click_coord(match_pics(template_path='tdjimages/tdge_yuanz_boss6.png'),do_click=True)
+        
+        # 检查BOSS图标，只点击找到的第一个
+        boss_icons = glob.glob('tdjimages/tdge_yuanz_boss*.png')
+        boss_found = False
+        for boss_icon in boss_icons:
+            if match_pics(template_path=boss_icon):
+                click_coord(match_pics(template_path=boss_icon), do_click=True)
+                boss_found = True
+                print(f"找到并点击BOSS图标: {boss_icon}")
+                break
+        
+        if not boss_found:
+            print("未找到任何BOSS图标")
+        
         time.sleep(3)
         if match_pics(template_path='tdjimages/tdge_yuanz_chuzhan.png'):
             click_coord(match_pics(template_path='tdjimages/tdge_yuanz_chuzhan.png'),do_click=True)

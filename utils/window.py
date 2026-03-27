@@ -59,7 +59,7 @@ def click_center():
     """
     off_windows = client_offset()  # 获取实际客户区坐标
     center_x = off_windows[0] + 1280 // 2   # 客户区左边界 + 宽度/2
-    center_y = off_windows[1] + 240         # 客户区上边界 + 高度/2
+    center_y = off_windows[1] + 230         # 客户区上边界 + 高度/2
     for i in range(3):
         pyautogui.click(center_x, center_y)
     print(f"[INFO] 点击窗口中心坐标 3次: ({center_x}, {center_y})")

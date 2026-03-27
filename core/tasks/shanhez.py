@@ -16,6 +16,7 @@ class ShanhezTask(BaseTask):
         off_shanhez = client_offset()# 定义相对窗口坐标偏移量
         print("匹配山河志图标")
         click_coord(match_pics(template_path='tdjimages/shanhez.png'),do_click=True)
+        click_coord(match_pics(template_path='tdjimages/shanhez2.png'),do_click=True)
         time.sleep(3)
         print("领取山河志上次奖励")
         while match_pics(template_path='tdjimages/shanhe_lingqu.png'):
